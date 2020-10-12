@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>鯖江市民認証サービス</h1>
+  <img src=/img/q.png height=100><br>
+  姓名：<input type=text><br>
+  住所：<input type=text><br>
+  <img src="https://chart.apis.google.com/chart?chs=140x140&cht=qr&chl={{ user.ip }}"><br>
+  EverIP： <code>{{ user.ip }}</code><br>
+  本EverIPとあなたを鯖江市民として登録するサービスへ申し込みます<br>
+  <div>署名：_______________________(印)</div>
+  <button onclick="window.print()">印刷する</button>
+{% endblock %}
