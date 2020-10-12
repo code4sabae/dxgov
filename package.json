@@ -1,0 +1,28 @@
+{
+  "name": "dxgov",
+  "version": "0.0.1",
+  "description": "DX for Government",
+  "main": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code4sabae/dxgov.git"
+  },
+  "keywords": [
+    "dx",
+    "gov",
+    "japan"
+  ],
+  "author": "kristopher tate <kt@connectfree.co.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/code4sabae/dxgov/issues"
+  },
+  "homepage": "https://github.com/code4sabae/dxgov#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nunjucks": "^3.2.2"
+  }
+}

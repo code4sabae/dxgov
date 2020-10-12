@@ -1,56 +1,40 @@
-import fs from "fs";
-import http from "http";
+import express from 'express';
+import nunjucks from 'nunjucks';
 
-// import { USERS } from "./users.mjs";
+const port = 8060;
+
+var app = express();
+
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
+
 const USERS = { // 登録済みユーザー
   "** ipv6 address **": { "name": "だれか" },
   "::1": {　"name": "ろーかる"　},
 };
 
-const server = http.createServer();
-server.listen(8060, "::", function () {
-  console.log("listener");
-});
-
-server.on("request", function (req, res) {
-  if (req.url.indexOf(".png") >= 0) {
-    fs.readFile("./" + req.url, (err, data) => {
-      if (err) {
-        res.writeHead(404);
-        res.end(JSON.stringify(err));
-        return;
-      }
-      res.writeHead(200, { "Content-Type": "image/png" });
-      res.end(data);
-    });
-    return;
-  }
+var checkEverIP = function (req, res, next) {
   const addr = req.connection.remoteAddress;
-  const user = USERS[addr];
-  console.log(addr, user);
+  res.locals.user = USERS[addr] || {};
+  res.locals.user.ip = req.connection.remoteAddress;
+  res.locals.user.exists = USERS[addr] ? true : false;
+  next()
+}
 
-  if (user) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write(`<meta charset="utf-8">`);
-    res.write(`ようこそ${user.name}さん！`);
-    res.write(`<h2>鯖江市民メニュー</h2>`);
-    res.write(`<button>結婚する</button>`);
-    res.write(`<button>水道を止める</button>`);
-    res.end();
-  } else {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write(`<meta charset="utf-8">`);
-    res.write(`<h1>鯖江市民認証サービス</h1>`);
-    res.write(`<img src=q.png height=100><br>`);
-    res.write(`姓名：<input type=text><br>`);
-    res.write(`住所：<input type=text><br>`);
-    res.write(
-      `<img src="https://chart.apis.google.com/chart?chs=140x140&cht=qr&chl=${addr}"><br>`,
-    );
-    res.write(`EverIP： <code>${addr}</code><br>`);
-    res.write(`本EverIPとあなたを鯖江市民として登録するサービスへ申し込みます<br>`);
-    res.write(`<div>署名：_______________________(印)</div>`);
-    res.write(`<button onclick="window.print()">印刷する</button>`);
-    res.end();
-  }
+app.use(checkEverIP);
+
+app.use(express.static('public'))
+
+app.get('/', function(req, res) {
+    if (res.locals.user.exists) {
+      res.render('home.html');
+    } else {
+      res.render('signup.html');
+    }
 });
+
+app.listen(port, () => {
+  console.log(`DX Gov listening at http://[::1]:${port}`)
+})
