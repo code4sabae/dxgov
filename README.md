@@ -15,4 +15,4 @@ npm i
 nodemon  
 
 ブラウザで開く  
-http://localhost:8060/  
+http://[::1]:8060  
