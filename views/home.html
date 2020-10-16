@@ -2,6 +2,7 @@
 {% block content %}
 ようこそ、{{ user.name }} さん！
 <h2>鯖江市民メニュー</h2>
-<button>結婚する</button>
-<button>水道を止める</button>
+<button onclick="javascript:document.location.href='register_terminal.html'">デジタル端末登録する</button><br>
+<button disabled>結婚する</button><br>
+<button disabled>水道を止める</button><br>
 {% endblock %}

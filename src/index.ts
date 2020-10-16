@@ -20,7 +20,7 @@ interface User {
 // 登録済みユーザー
 const USERS: Record<string, User> = {
   "fc01:97ba:7e39:98c1:329b:ed85:db75:6fd6": { name: "福野", age: 41 },
-  "::1": { name: "ろーかる", age: 100 },
+  "::1": { name: "手寿戸", age: 100 },
 };
 
 export const checkEverIP = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -46,11 +46,18 @@ app.use(checkEverIP);
 app.use(express.static('public'))
 
 app.get('/', function(req, res) {
-    if (res.locals.user.exists) {
-      res.render('home.html');
-    } else {
-      res.render('signup.html');
-    }
+  if (res.locals.user.exists) {
+    res.render('home.html');
+  } else {
+    res.render('signup.html');
+  }
+});
+app.get('/register_terminal.html', function(req, res) {
+  if (res.locals.user.exists) {
+    res.render('register_terminal.html');
+  } else {
+    res.render('signup.html');
+  }
 });
 
 app.listen(port, () => {

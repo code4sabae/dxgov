@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {
+  text-align: center;
+}
+#box {
+  display: inline-block;
+  border: 1px solid black;
+  margin: 1em;
+  padding: 1em;
+}
+</style>
+<div id="box">
+<h2>デジタル端末登録申請</h2>
+<div id="main"></div>
+</div>
+<br>
+<button disable>申請する</a>
+
+<script type="module">
+import { CSV } from "https://code4sabae.github.io/js/CSV.js";
+
+const csvurl = "./csv/register_terminal.csv";
+
+const user = "{{ user.name }}";
+
+window.onload = async () => {
+  const scsv = await (await fetch(csvurl)).text();
+  const json = CSV.toJSON(CSV.decode(scsv));
+  console.log(json);
+  const cr = (tag) => document.createElement(tag);
+  const tbl = cr("table");
+  for (const c of json) {
+    const tr = cr("tr");
+    tbl.appendChild(tr);
+    const th = cr("th");
+    th.style.textAlign = "left";
+    const label = cr("span");
+    label.textContent = c.項目名;
+    th.appendChild(label);
+    tr.appendChild(th);
+    const td = cr("td");
+    tr.appendChild(td);
+    const inp = cr("input");
+    td.appendChild(inp);
+    inp.value = c.規定項目値;
+    if (c.項目型 === "日付(YYYY-MM-DD)") {
+      inp.type = "date";
+    }
+    if (c.項目名 === "本人氏名") {
+      inp.value = user;
+    }
+    tr.id = c.項目名;
+  }
+  main.appendChild(tbl);
+};
+</script>
+
+{% endblock %}
